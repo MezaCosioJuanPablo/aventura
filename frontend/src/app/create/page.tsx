@@ -94,7 +94,7 @@ export default function CreateAdventurePage() {
     if (!formData.difficultyLevel) {
       newErrors.difficultyLevel = "Selecciona un nivel de dificultad";
     }
-    if (!formData.estimatedDuration.trim()) {
+    if (!formData.estimatedDuration?.trim()) {
       newErrors.estimatedDuration = "La duración estimada es obligatoria";
     }
 

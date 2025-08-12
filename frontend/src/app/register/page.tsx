@@ -17,9 +17,13 @@ import { userService } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+interface RegisterFormData extends RegisterRequest {
+  confirmPassword: string;
+}
+
 export default function RegisterPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState<RegisterRequest>({
+  const [formData, setFormData] = useState<RegisterFormData>({
     username: "",
     email: "",
     password: "",
@@ -109,8 +113,7 @@ export default function RegisterPage() {
         password: formData.password,
       });
 
-      // Store token in localStorage (temporary solution)
-      localStorage.setItem("authToken", response.token);
+      // Store user info in localStorage (temporary solution)
       localStorage.setItem("user", JSON.stringify(response.user));
 
       // Redirect to home page after successful registration

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   MapPin,
@@ -12,11 +13,14 @@ import {
   TrendingUp,
   Users,
   Globe,
+  Edit,
+  Trash2,
 } from "lucide-react";
 import { Post } from "@/types";
 import { postService } from "@/lib/api";
 
 export default function HomePage() {
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,6 +57,24 @@ export default function HomePage() {
       console.error("Error en búsqueda:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeletePost = async (postId: number, postTitle: string) => {
+    const isConfirmed = window.confirm(
+      `¿Estás seguro de que quieres eliminar la aventura "${postTitle}"?\n\nEsta acción no se puede deshacer.`
+    );
+
+    if (isConfirmed) {
+      try {
+        await postService.deletePost(postId);
+        // Recargar la lista de posts
+        loadPosts();
+        alert("Aventura eliminada exitosamente");
+      } catch (error) {
+        console.error("Error eliminando la aventura:", error);
+        alert("Error al eliminar la aventura. Inténtalo de nuevo.");
+      }
     }
   };
 
@@ -290,8 +312,24 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      <div className="text-sm text-gray-500">
-                        {new Date(post.createdAt).toLocaleDateString("es-MX")}
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => router.push(`/edit/${post.id}`)}
+                          className="inline-flex items-center px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                        >
+                          <Edit className="w-3 h-3 mr-1" />
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDeletePost(post.id, post.title)}
+                          className="inline-flex items-center px-3 py-1 text-xs bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-1 mr-1" />
+                          Eliminar
+                        </button>
+                        <div className="text-sm text-gray-500">
+                          {new Date(post.createdAt).toLocaleDateString("es-MX")}
+                        </div>
                       </div>
                     </div>
                   </div>

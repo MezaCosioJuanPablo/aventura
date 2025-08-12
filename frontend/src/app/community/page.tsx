@@ -55,8 +55,9 @@ export default function CommunityPage() {
 
   const filteredUsers = users.filter((user) => {
     if (selectedFilter === "all") return true;
-    if (selectedFilter === "adventurers" && user.postsCount > 0) return true;
-    if (selectedFilter === "new" && user.postsCount === 0) return true;
+    // Por ahora, todos los usuarios son considerados aventureros
+    if (selectedFilter === "adventurers") return true;
+    if (selectedFilter === "new") return true;
     return true;
   });
 
@@ -71,10 +72,8 @@ export default function CommunityPage() {
   });
 
   const getTopAdventurers = () => {
-    return users
-      .filter((user) => user.postsCount > 0)
-      .sort((a, b) => (b.postsCount || 0) - (a.postsCount || 0))
-      .slice(0, 5);
+    // Por ahora, retornamos los primeros 5 usuarios
+    return users.slice(0, 5);
   };
 
   const getRecentActivity = () => {
@@ -283,9 +282,7 @@ export default function CommunityPage() {
                       <p className="text-sm font-medium text-gray-900 truncate">
                         {user.username}
                       </p>
-                      <p className="text-sm text-gray-500">
-                        {user.postsCount || 0} aventuras
-                      </p>
+                      <p className="text-sm text-gray-500">Aventurero</p>
                     </div>
                     <button className="flex-shrink-0">
                       <UserPlus className="w-5 h-5 text-gray-400 hover:text-blue-600 transition-colors" />
@@ -372,21 +369,14 @@ export default function CommunityPage() {
                           <p className="text-sm text-gray-500 truncate">
                             {user.email}
                           </p>
-                          {user.location && (
-                            <div className="flex items-center mt-1">
-                              <MapPin className="w-4 h-4 text-gray-400 mr-1" />
-                              <span className="text-sm text-gray-500">
-                                {user.location}
-                              </span>
-                            </div>
-                          )}
+                          {/* La ubicación no está disponible en el modelo de usuario actual */}
                         </div>
                       </div>
 
                       <div className="grid grid-cols-3 gap-4 mb-4 text-center">
                         <div>
                           <div className="text-lg font-semibold text-gray-900">
-                            {user.postsCount || 0}
+                            -
                           </div>
                           <div className="text-xs text-gray-500">Aventuras</div>
                         </div>

@@ -62,8 +62,7 @@ export default function LoginPage() {
       setLoading(true);
       const response = await userService.login(formData);
 
-      // Store token in localStorage (temporary solution)
-      localStorage.setItem("authToken", response.token);
+      // Store user info in localStorage (temporary solution)
       localStorage.setItem("user", JSON.stringify(response.user));
 
       // Redirect to home page after successful login
