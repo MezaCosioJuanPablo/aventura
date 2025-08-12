@@ -40,11 +40,12 @@
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- Seguridad Spring + JWT moderno -->
+    <!-- Seguridad Spring + JWT moderno - TEMPORALMENTE DESHABILITADO PARA DESARROLLO
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
+    -->
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-api</artifactId>
