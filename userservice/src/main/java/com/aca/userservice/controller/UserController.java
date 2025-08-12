@@ -3,8 +3,10 @@ package com.aca.userservice.controller;
 import com.aca.userservice.dto.LoginRequest;
 import com.aca.userservice.dto.RegisterRequest;
 import com.aca.userservice.dto.UserDto;
+import com.aca.userservice.model.User;
 import com.aca.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,29 +14,44 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}, allowedHeaders = "*")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request) {
-        System.out.println("Register request: " + request.getEmail());
-        return userService.register(request);
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+        try {
+            String result = userService.register(request);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error en el registro: " + e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-        System.out.println("Login request: " + request.getEmail());
-        return userService.login(request);
-    }
-
-    @PostMapping("/{userId}/follow/{targetId}")
-    public String follow(@PathVariable Long userId, @PathVariable Long targetId) {
-        return userService.follow(userId, targetId);
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+        try {
+            String result = userService.login(request);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error en el login: " + e.getMessage());
+        }
     }
 
     @GetMapping
-    public List<UserDto> allUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @PostMapping("/{userId}/follow/{targetId}")
+    public ResponseEntity<String> followUser(@PathVariable Long userId, @PathVariable Long targetId) {
+        try {
+            String result = userService.followUser(userId, targetId);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al seguir usuario: " + e.getMessage());
+        }
     }
 }

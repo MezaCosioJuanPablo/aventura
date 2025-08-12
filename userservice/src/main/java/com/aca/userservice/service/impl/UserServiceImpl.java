@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String follow(Long userId, Long targetId) {
+    public String followUser(Long userId, Long targetId) {
         User user = userRepository.findById(userId).orElseThrow();
         User target = userRepository.findById(targetId).orElseThrow();
         user.getFollowing().add(target);
@@ -55,13 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(user -> {
-            UserDto dto = new UserDto();
-            dto.setId(user.getId());
-            dto.setUsername(user.getUsername());
-            dto.setEmail(user.getEmail());
-            return dto;
-        }).collect(Collectors.toList());
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
