@@ -72,9 +72,21 @@ export default function LoginPage() {
       } else {
         setErrors({ submit: "Respuesta inválida del servidor" });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error en login:", error);
-      setErrors({ submit: "Credenciales incorrectas. Inténtalo de nuevo." });
+
+      // Intentar extraer el mensaje de error del backend
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setErrors({ submit: error.response.data.message });
+      } else if (error.message) {
+        setErrors({ submit: error.message });
+      } else {
+        setErrors({ submit: "Credenciales incorrectas. Inténtalo de nuevo." });
+      }
     } finally {
       setLoading(false);
     }

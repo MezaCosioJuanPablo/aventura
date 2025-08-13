@@ -123,9 +123,21 @@ export default function RegisterPage() {
       } else {
         setErrors({ submit: "Respuesta inválida del servidor" });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error en registro:", error);
-      setErrors({ submit: "Error al crear la cuenta. Inténtalo de nuevo." });
+
+      // Intentar extraer el mensaje de error del backend
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setErrors({ submit: error.response.data.message });
+      } else if (error.message) {
+        setErrors({ submit: error.message });
+      } else {
+        setErrors({ submit: "Error al crear la cuenta. Inténtalo de nuevo." });
+      }
     } finally {
       setLoading(false);
     }

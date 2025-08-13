@@ -30,6 +30,43 @@ export const userApi = axios.create({
   timeout: 10000, // 10 segundos de timeout
 });
 
+// Interceptores para userApi - manejo silencioso de errores 400
+userApi.interceptors.request.use(
+  (config) => {
+    console.log("User API Request:", config.method?.toUpperCase(), config.url);
+    return config;
+  },
+  (error) => {
+    console.error("User API Request Error:", error);
+    return Promise.reject(error);
+  }
+);
+
+userApi.interceptors.response.use(
+  (response) => {
+    console.log("User API Response:", response.status, response.config.url);
+    return response;
+  },
+  (error) => {
+    // Para errores 400 (Bad Request), solo logear el error, no mostrar "Failed to load resource"
+    if (error.response && error.response.status === 400) {
+      console.log(
+        "User API 400 Error (manejado):",
+        error.response.data?.message || "Bad Request"
+      );
+      return Promise.reject(error);
+    }
+
+    // Para otros errores, logear normalmente
+    console.error("User API Response Error:", error);
+    if (error.response) {
+      console.error("Error Response:", error.response.data);
+      console.error("Error Status:", error.response.status);
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Interceptores para logging
 postApi.interceptors.request.use(
   (config) => {
@@ -170,24 +207,34 @@ export const commentService = {
 // User Service API - AHORA FUNCIONAL CON CORS RESUELTO
 export const userService = {
   register: async (user: RegisterRequest): Promise<AuthResponse> => {
-    console.log("Registrando usuario real:", user.email);
-    console.log("Datos enviados:", JSON.stringify(user, null, 2));
-    const response = await userApi.post<AuthResponse>(
-      "/api/users/register",
-      user
-    );
-    console.log("Respuesta del backend:", response.data);
-    return response.data;
+    try {
+      console.log("Registrando usuario real:", user.email);
+      console.log("Datos enviados:", JSON.stringify(user, null, 2));
+      const response = await userApi.post<AuthResponse>(
+        "/api/users/register",
+        user
+      );
+      console.log("Respuesta del backend:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error en registro desde api.ts:", error);
+      throw error; // Re-lanzar el error para que lo maneje el componente
+    }
   },
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
-    console.log("Iniciando sesión real:", credentials.email);
-    console.log("Datos enviados:", JSON.stringify(credentials, null, 2));
-    const response = await userApi.post<AuthResponse>(
-      "/api/users/login",
-      credentials
-    );
-    console.log("Respuesta del backend:", response.data);
-    return response.data;
+    try {
+      console.log("Iniciando sesión real:", credentials.email);
+      console.log("Datos enviados:", JSON.stringify(credentials, null, 2));
+      const response = await userApi.post<AuthResponse>(
+        "/api/users/login",
+        credentials
+      );
+      console.log("Respuesta del backend:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error en login desde api.ts:", error);
+      throw error; // Re-lanzar el error para que lo maneje el componente
+    }
   },
   getAllUsers: async (): Promise<User[]> => {
     console.log("Obteniendo usuarios reales");
