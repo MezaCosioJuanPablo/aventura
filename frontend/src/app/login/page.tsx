@@ -7,9 +7,11 @@ import { LoginRequest } from "@/types";
 import { userService } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [formData, setFormData] = useState<LoginRequest>({
     email: "",
     password: "",
@@ -62,11 +64,14 @@ export default function LoginPage() {
       setLoading(true);
       const response = await userService.login(formData);
 
-      // Store user info in localStorage (temporary solution)
-      localStorage.setItem("user", JSON.stringify(response.user));
-
-      // Redirect to home page after successful login
-      router.push("/");
+      // Use the auth context to login
+      if (response.user) {
+        login(response.user);
+        // Redirect to home page after successful login
+        router.push("/");
+      } else {
+        setErrors({ submit: "Respuesta inválida del servidor" });
+      }
     } catch (error) {
       console.error("Error en login:", error);
       setErrors({ submit: "Credenciales incorrectas. Inténtalo de nuevo." });

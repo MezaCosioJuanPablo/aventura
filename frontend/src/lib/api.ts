@@ -167,59 +167,38 @@ export const commentService = {
   },
 };
 
-// User Service API - TEMPORALMENTE DESHABILITADO POR PROBLEMAS DE CORS
+// User Service API - AHORA FUNCIONAL CON CORS RESUELTO
 export const userService = {
   register: async (user: RegisterRequest): Promise<AuthResponse> => {
-    // TEMPORAL: Simular respuesta exitosa mientras resolvemos CORS
-    console.log("Registro simulado para:", user.email);
-    return {
-      message: "Usuario registrado exitosamente",
-      user: {
-        id: 1,
-        username: user.username,
-        email: user.email,
-        followersCount: 0,
-        followingCount: 0,
-      },
-    };
+    console.log("Registrando usuario real:", user.email);
+    console.log("Datos enviados:", JSON.stringify(user, null, 2));
+    const response = await userApi.post<AuthResponse>(
+      "/api/users/register",
+      user
+    );
+    console.log("Respuesta del backend:", response.data);
+    return response.data;
   },
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
-    // TEMPORAL: Simular respuesta exitosa mientras resolvemos CORS
-    console.log("Login simulado para:", credentials.email);
-    return {
-      message: "Login exitoso",
-      user: {
-        id: 1,
-        username: "usuario_temp",
-        email: credentials.email,
-        followersCount: 0,
-        followingCount: 0,
-      },
-    };
+    console.log("Iniciando sesión real:", credentials.email);
+    console.log("Datos enviados:", JSON.stringify(credentials, null, 2));
+    const response = await userApi.post<AuthResponse>(
+      "/api/users/login",
+      credentials
+    );
+    console.log("Respuesta del backend:", response.data);
+    return response.data;
   },
   getAllUsers: async (): Promise<User[]> => {
-    // TEMPORAL: Simular respuesta exitosa mientras resolvemos CORS
-    console.log("Obteniendo usuarios simulados");
-    return [
-      {
-        id: 1,
-        username: "antonio",
-        email: "antonio@email.com",
-        followersCount: 5,
-        followingCount: 2,
-      },
-      {
-        id: 2,
-        username: "maria",
-        email: "maria@email.com",
-        followersCount: 3,
-        followingCount: 1,
-      },
-    ];
+    console.log("Obteniendo usuarios reales");
+    const response = await userApi.get<User[]>("/api/users");
+    return response.data;
   },
   followUser: async (userId: number, targetId: number): Promise<string> => {
-    // TEMPORAL: Simular respuesta exitosa mientras resolvemos CORS
-    console.log("Siguiendo usuario:", targetId);
-    return "Usuario seguido exitosamente";
+    console.log("Siguiendo usuario real:", targetId);
+    const response = await userApi.post<string>(
+      `/api/users/${userId}/follow/${targetId}`
+    );
+    return response.data;
   },
 };
