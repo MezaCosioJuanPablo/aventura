@@ -93,191 +93,206 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          {/* Logo */}
-          <div className="mx-auto h-16 w-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-6">
-            <Mountain className="h-8 w-8 text-white" />
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Bienvenido de vuelta
-          </h2>
-          <p className="text-gray-600">
-            Inicia sesión en tu cuenta para continuar explorando
-          </p>
-        </motion.div>
+      {/* Floating Mountains */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-gray-800/30 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-700/20 to-transparent"></div>
+      </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-xl p-8"
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Correo Electrónico
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="tu@email.com"
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.email ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-              </div>
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-              )}
-            </div>
-
-            {/* Password */}
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Contraseña
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="Tu contraseña"
-                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.password ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-              )}
-            </div>
-
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-700"
-                >
-                  Recordarme
-                </label>
-              </div>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div>
-            </div>
-
-            {/* Submit Error */}
-            {errors.submit && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-sm text-red-600">{errors.submit}</p>
-              </div>
-            )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Iniciando sesión...
-                </>
-              ) : (
-                <>
-                  Iniciar Sesión
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Divider */}
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
-                  ¿No tienes una cuenta?
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Register Link */}
-          <div className="mt-6">
-            <Link
-              href="/register"
-              className="w-full inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              Crear cuenta nueva
-            </Link>
-          </div>
-        </motion.div>
-
-        {/* Back to Home */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center"
-        >
-          <Link
-            href="/"
-            className="text-blue-600 hover:text-blue-500 font-medium"
+      <div className="relative z-10 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
           >
-            ← Volver al inicio
-          </Link>
-        </motion.div>
+            {/* Logo Animado */}
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 1, type: "spring", stiffness: 200 }}
+              className="mx-auto h-24 w-24 bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 rounded-3xl flex items-center justify-center mb-8 shadow-2xl"
+            >
+              <Mountain className="h-12 w-12 text-white" />
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-5xl font-bold text-white mb-4 tracking-tight"
+            >
+              ¡Bienvenido a la
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Aventura!
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl text-blue-100 leading-relaxed"
+            >
+              Descubre increíbles aventuras en Acapulco y sus alrededores
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="backdrop-blur-xl bg-white/10 rounded-3xl shadow-2xl p-8 border border-white/20"
+          >
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Email */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-white mb-3 text-lg"
+                >
+                  Correo Electrónico
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-300 w-5 h-5" />
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="tu@email.com"
+                    className={`w-full pl-12 pr-4 py-4 bg-white/20 border-2 border-white/30 rounded-2xl focus:ring-4 focus:ring-blue-400/50 focus:border-blue-400 text-white placeholder-blue-200 transition-all duration-300 ${
+                      errors.email ? "border-red-400 focus:ring-red-400/50" : ""
+                    }`}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-300 font-medium">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+
+              {/* Password */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-white mb-3 text-lg"
+                >
+                  Contraseña
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-300 w-5 h-5" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Tu contraseña"
+                    className={`w-full pl-12 pr-12 py-4 bg-white/20 border-2 border-white/30 rounded-2xl focus:ring-4 focus:ring-blue-400/50 focus:border-blue-400 text-white placeholder-blue-200 transition-all duration-300 ${
+                      errors.password
+                        ? "border-red-400 focus:ring-red-400/50"
+                        : ""
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-300 hover:text-blue-200 transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="mt-2 text-sm text-red-300 font-medium">
+                    {errors.password}
+                  </p>
+                )}
+              </div>
+
+              {/* Submit Error */}
+              {errors.submit && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="backdrop-blur-xl bg-red-500/20 border-2 border-red-400/50 rounded-2xl p-4"
+                >
+                  <p className="text-sm text-red-200 font-medium text-center">
+                    {errors.submit}
+                  </p>
+                </motion.div>
+              )}
+
+              {/* Submit Button */}
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={loading}
+                className="w-full flex justify-center items-center px-8 py-4 border-2 border-transparent text-lg font-bold rounded-2xl text-white bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 hover:from-blue-600 hover:via-purple-600 hover:to-indigo-600 focus:outline-none focus:ring-4 focus:ring-blue-400/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-2xl"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-2"></div>
+                    Iniciando aventura...
+                  </>
+                ) : (
+                  <>
+                    ¡Iniciar Aventura!
+                    <ArrowRight className="ml-3 h-6 w-6" />
+                  </>
+                )}
+              </motion.button>
+            </form>
+
+            {/* Divider */}
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/30" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 backdrop-blur-xl bg-blue-900/50 text-blue-200 font-medium">
+                    ¿No tienes una cuenta?
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Register Link */}
+            <div className="mt-6">
+              <Link
+                href="/register"
+                className="w-full inline-flex items-center justify-center px-6 py-4 border-2 border-white/30 text-white rounded-2xl hover:bg-white/20 transition-all duration-300 font-bold backdrop-blur-xl bg-white/10"
+              >
+                ¡Únete a la aventura!
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Back to Home */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+            className="text-center"
+          ></motion.div>
+        </div>
       </div>
     </div>
   );

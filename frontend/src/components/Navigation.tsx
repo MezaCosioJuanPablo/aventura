@@ -57,26 +57,27 @@ export default function Navigation() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
-              <Search className="w-5 h-5" />
-            </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
-              <Bell className="w-5 h-5" />
-            </button>
-
             {isAuthenticated ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-700 font-medium">
-                  ¡Hola, {user?.username}!
-                </span>
-                <button
-                  onClick={logout}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                >
-                  <User className="w-4 h-4 mr-2" />
-                  Cerrar Sesión
+              <>
+                <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                  <Search className="w-5 h-5" />
                 </button>
-              </div>
+                <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                  <Bell className="w-5 h-5" />
+                </button>
+                <div className="flex items-center space-x-4">
+                  <span className="text-gray-700 font-medium">
+                    ¡Hola, {user?.username}!
+                  </span>
+                  <button
+                    onClick={logout}
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Cerrar Sesión
+                  </button>
+                </div>
+              </>
             ) : (
               <div className="flex items-center space-x-4">
                 <Link
@@ -124,44 +125,63 @@ export default function Navigation() {
         className="md:hidden overflow-hidden bg-white border-t border-gray-200"
       >
         <div className="px-4 py-6 space-y-4">
-          <Link
-            href="/explore"
-            className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
-            onClick={() => setIsOpen(false)}
-          >
-            Explorar
-          </Link>
-          <Link
-            href="/create"
-            className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
-            onClick={() => setIsOpen(false)}
-          >
-            Crear Aventura
-          </Link>
-          <Link
-            href="/community"
-            className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
-            onClick={() => setIsOpen(false)}
-          >
-            Comunidad
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                href="/explore"
+                className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                onClick={() => setIsOpen(false)}
+              >
+                Explorar
+              </Link>
+              <Link
+                href="/create"
+                className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                onClick={() => setIsOpen(false)}
+              >
+                Crear Aventura
+              </Link>
+              <Link
+                href="/community"
+                className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                onClick={() => setIsOpen(false)}
+              >
+                Comunidad
+              </Link>
 
-          <div className="pt-4 border-t border-gray-200 space-y-3">
-            <Link
-              href="/login"
-              className="block w-full text-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Iniciar Sesión
-            </Link>
-            <Link
-              href="/register"
-              className="block w-full text-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Registrarse
-            </Link>
-          </div>
+              <div className="pt-4 border-t border-gray-200 space-y-3">
+                <div className="text-center text-gray-700 font-medium py-2">
+                  ¡Hola, {user?.username}!
+                </div>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  className="block w-full text-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="pt-4 border-t border-gray-200 space-y-3">
+              <Link
+                href="/login"
+                className="block w-full text-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Iniciar Sesión
+              </Link>
+              <Link
+                href="/register"
+                className="block w-full text-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Registrarse
+              </Link>
+            </div>
+          )}
         </div>
       </motion.div>
     </nav>
