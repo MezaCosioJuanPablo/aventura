@@ -2,7 +2,7 @@ package com.aca.userservice.controller;
 
 import com.aca.userservice.dto.LoginRequest;
 import com.aca.userservice.dto.RegisterRequest;
-import com.aca.userservice.dto.UserDto;
+import com.aca.userservice.dto.AuthResponse;
 import com.aca.userservice.model.User;
 import com.aca.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,23 +20,23 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
+    @PostMapping(value = "/register", produces = "application/json")
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         try {
-            String result = userService.register(request);
+            AuthResponse result = userService.register(request);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error en el registro: " + e.getMessage());
+            return ResponseEntity.badRequest().body(new AuthResponse("Error en el registro: " + e.getMessage()));
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
+    @PostMapping(value = "/login", produces = "application/json")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         try {
-            String result = userService.login(request);
+            AuthResponse result = userService.login(request);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error en el login: " + e.getMessage());
+            return ResponseEntity.badRequest().body(new AuthResponse("Error en el login: " + e.getMessage()));
         }
     }
 

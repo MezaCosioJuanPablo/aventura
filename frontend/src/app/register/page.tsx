@@ -16,6 +16,7 @@ import { RegisterRequest } from "@/types";
 import { userService } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface RegisterFormData extends RegisterRequest {
   confirmPassword: string;
@@ -23,6 +24,7 @@ interface RegisterFormData extends RegisterRequest {
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [formData, setFormData] = useState<RegisterFormData>({
     username: "",
     email: "",
@@ -113,11 +115,14 @@ export default function RegisterPage() {
         password: formData.password,
       });
 
-      // Store user info in localStorage (temporary solution)
-      localStorage.setItem("user", JSON.stringify(response.user));
-
-      // Redirect to home page after successful registration
-      router.push("/");
+      // Use the auth context to login after successful registration
+      if (response.user) {
+        login(response.user);
+        // Redirect to home page after successful registration
+        router.push("/");
+      } else {
+        setErrors({ submit: "Respuesta inválida del servidor" });
+      }
     } catch (error) {
       console.error("Error en registro:", error);
       setErrors({ submit: "Error al crear la cuenta. Inténtalo de nuevo." });
